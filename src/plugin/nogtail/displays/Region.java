@@ -85,4 +85,5 @@ public class Region {
 	enum Direction {
 		NORTH, SOUTH, EAST, WEST;
 	}
+
 }

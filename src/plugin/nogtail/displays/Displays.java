@@ -11,4 +11,5 @@ public class Displays extends JavaPlugin {
 	public void onDisable() {
 		// TODO
 	}
+
 }

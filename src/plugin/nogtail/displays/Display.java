@@ -57,4 +57,5 @@ public class Display {
 		}
 		return amount;
 	}
+
 }

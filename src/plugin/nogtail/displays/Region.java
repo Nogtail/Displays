@@ -3,7 +3,6 @@ package plugin.nogtail.displays;
 import org.bukkit.World;
 
 public class Region {
-
 	private Direction direction;
 	private World world;
 	private Vector pos1;
@@ -85,5 +84,4 @@ public class Region {
 	enum Direction {
 		NORTH, SOUTH, EAST, WEST;
 	}
-
 }

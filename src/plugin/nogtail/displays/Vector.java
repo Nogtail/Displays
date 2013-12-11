@@ -1,7 +1,6 @@
 package plugin.nogtail.displays;
 
 public class Vector {
-
 	private int x;
 	private int y;
 	private int z;
@@ -35,5 +34,4 @@ public class Vector {
 	public void setZ(int z) {
 		this.z = z;
 	}
-
 }

@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 public class Display {
-
 	public Region region;
 	private int id;
 
@@ -57,5 +56,4 @@ public class Display {
 		}
 		return amount;
 	}
-
 }

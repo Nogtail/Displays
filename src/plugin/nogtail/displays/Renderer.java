@@ -6,10 +6,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 public class Renderer extends MapRenderer {
-
 	public void render(MapView view, MapCanvas canvas, Player player) {
 		// TODO
-
 	}
-
 }

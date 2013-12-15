@@ -1,6 +1,13 @@
 package plugin.nogtail.displays;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapView;
 
 public class Region {
 	private Direction direction;
@@ -72,13 +79,45 @@ public class Region {
 	}
 
 	public Vector getMinimumPoint() {
-		return new Vector(Math.min(pos1.getX(), pos2.getX()), Math.min(
-				pos1.getY(), pos2.getY()), Math.min(pos1.getZ(), pos2.getZ()));
+		return new Vector(Math.min(pos1.getX(), pos2.getX()), Math.min(pos1.getY(), pos2.getY()), Math.min(pos1.getZ(), pos2.getZ()));
 	}
 
 	public Vector getMaximumPoint() {
-		return new Vector(Math.max(pos1.getX(), pos2.getX()), Math.max(
-				pos1.getY(), pos2.getY()), Math.max(pos1.getZ(), pos2.getZ()));
+		return new Vector(Math.max(pos1.getX(), pos2.getX()), Math.max(pos1.getY(), pos2.getY()), Math.max(pos1.getZ(), pos2.getZ()));
+	}
+
+	public Display createDisplay() {
+		Vector min = getMinimumPoint();
+		Vector max = getMaximumPoint();
+		World world = getWorld();
+		int amount = 0;
+
+		int minX = min.getX();
+		int minY = min.getY();
+		int minZ = min.getZ();
+		int maxX = max.getX();
+		int maxY = max.getY();
+		int maxZ = max.getZ();
+
+		DisplaySegment[] segments = new DisplaySegment[getWidth() * getHeight() * getLegnth()];
+
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				for (int z = minZ; z <= maxZ; z++) {
+					Location location = new Location(world, x, y, z);
+					MapView map = Bukkit.getServer().createMap(world);
+					short id = map.getId();
+
+					ItemFrame it = (ItemFrame) world.spawnEntity(location, EntityType.ITEM_FRAME);
+					it.setItem(new ItemStack(Material.MAP, 1, id));
+
+					segments[amount] = new DisplaySegment(id, it.getUniqueId());
+
+					amount++;
+				}
+			}
+		}
+		return new Display(this, segments);
 	}
 
 	enum Direction {

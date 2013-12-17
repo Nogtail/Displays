@@ -11,6 +11,7 @@ public class Display {
 
 	public Display(Region region, DisplaySegment[] segments, int id) {
 		this.region = region;
+		this.segments = segments;
 		this.setId(id);
 	}
 

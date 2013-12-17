@@ -4,13 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapView;
 
 public class Region {
-	private Direction direction;
+	private BlockFace direction;
 	private World world;
 	private Vector pos1;
 	private Vector pos2;
@@ -50,8 +51,12 @@ public class Region {
 		return max.getZ() - min.getZ() + 1;
 	}
 
-	public Direction getDirection() {
+	public BlockFace getDirection() {
 		return direction;
+	}
+
+	public void setDirection(BlockFace direction) {
+		this.direction = direction;
 	}
 
 	public World getWorld() {
@@ -109,6 +114,8 @@ public class Region {
 					short id = map.getId();
 
 					ItemFrame it = (ItemFrame) world.spawnEntity(location, EntityType.ITEM_FRAME);
+					it.teleport(location.getBlock().getRelative(direction).getLocation());
+					it.setFacingDirection(direction, true); // May be buggy?
 					it.setItem(new ItemStack(Material.MAP, 1, id));
 
 					segments[amount] = new DisplaySegment(id, it.getUniqueId());
@@ -118,9 +125,5 @@ public class Region {
 			}
 		}
 		return new Display(this, segments);
-	}
-
-	enum Direction {
-		NORTH, SOUTH, EAST, WEST;
 	}
 }

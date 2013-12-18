@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 public class Region {
@@ -91,7 +92,31 @@ public class Region {
 		return new Vector(Math.max(pos1.getX(), pos2.getX()), Math.max(pos1.getY(), pos2.getY()), Math.max(pos1.getZ(), pos2.getZ()));
 	}
 
-	public Display createDisplay() {
+	public boolean is2D() {
+		if (getWidth() > 1 && getLegnth() > 1) {
+			return false;
+		}
+
+		if (getWidth() == 1) {
+			return true;
+		}
+
+		if (getHeight() == 1) {
+			return true;
+		}
+
+		if (getLegnth() == 1) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public Display createDisplay() throws Region3DException {
+		if (!is2D()) {
+			throw new Region3DException();
+		}
+
 		Vector min = getMinimumPoint();
 		Vector max = getMaximumPoint();
 		World world = getWorld();
@@ -117,6 +142,12 @@ public class Region {
 					it.teleport(location.getBlock().getRelative(direction).getLocation());
 					it.setFacingDirection(direction, true); // May be buggy?
 					it.setItem(new ItemStack(Material.MAP, 1, id));
+
+					// testing code for renderer
+					for (MapRenderer mr : map.getRenderers()) {
+						map.removeRenderer(mr);
+					}
+					map.addRenderer(new Renderer());
 
 					segments[amount] = new DisplaySegment(id, it.getUniqueId());
 

@@ -1,6 +1,10 @@
 package plugin.nogtail.displays;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -130,6 +134,7 @@ public class Region {
 		int maxZ = max.getZ();
 
 		DisplaySegment[] segments = new DisplaySegment[getWidth() * getHeight() * getLegnth()];
+		Set<Chunk> chunks = new HashSet<Chunk>();
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
@@ -140,8 +145,9 @@ public class Region {
 
 					ItemFrame it = (ItemFrame) world.spawnEntity(location, EntityType.ITEM_FRAME);
 					it.teleport(location.getBlock().getRelative(direction).getLocation());
-					it.setFacingDirection(direction, true); // May be buggy?
+					it.setFacingDirection(direction, true);
 					it.setItem(new ItemStack(Material.MAP, 1, id));
+					chunks.add(it.getLocation().getChunk());
 
 					// testing code for renderer
 					for (MapRenderer mr : map.getRenderers()) {
@@ -155,6 +161,12 @@ public class Region {
 				}
 			}
 		}
+		for (Chunk chunk : chunks) { // Still seems to glitch
+			chunk.unload(true, false);
+			chunk.load();
+			Bukkit.getLogger().info("Legnth: " + chunks.size());
+		}
+
 		return new Display(this, segments);
 	}
 }
